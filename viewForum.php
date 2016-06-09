@@ -15,31 +15,32 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
 -->
 <?php
-	include 'globals.php';
-	$fid = 0;
+	include 'globalHeader.php';
+	include_once 'Functions/forums.php';
+	if (!class_exists('forumManager')) {
+		include 'Classes/forumManager.php';
+	}
+	$fid = -1;
 	if (isset($_GET['fid'])) {
 		$fid = $_GET['fid'];
 	}
-	$curForum = new forum();
-	$curForum->load($fid);
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title><?php echo("" . $curForum->name); ?></title>
+        <title>Viewing forum</title>
     </head>
     <body>
-	<?php
-		if ($curForum->parent != null) {
-			$parentForum = new forum();
-			$parentForum->load($curForum->parent, false);
-			?><a href="viewForum.php?fid=<?php echo $parentForum->fid; ?>"><?php echo $parentForum->name; ?></a><?php
+	   <a href="viewForum.php">Forum Index</a>
+	   <?php
+		if ($fid < 0) {
+			$forums = $FM->getForums();
+			foreach ($forums as $forum) {
+				display_forumList($forum->fid);
+			}
+		} else {
+			display_forumList($fid);
 		}
-		if (count($curForum->children) > 0) { ?>
-	   <h3>Forums</h3><h4> <?php
-		foreach ($curForum->children as $childForum) {
-			?>&nbsp;&nbsp;&nbsp;&nbsp;<a href="viewForum.php?fid=<?php echo $childForum->fid; ?>"><?php echo $childForum->name; ?></a><?php
-		}
-		}?></h4>
+	   ?>
     </body>
 </html>

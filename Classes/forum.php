@@ -22,7 +22,9 @@
  * @author phyrrus9
  */
 
-require_once 'DBManager.php';
+if (!class_exists('DBManager')) {
+	include('Classes/DBManager.php');
+}
 
 class forum
 {
@@ -93,6 +95,15 @@ class forum
 			$this->recursionDone = true;
 		}
 		return $ret;
+	}
+	public function delete() {
+		/*******TODO*******/
+	}
+	public function create($name, $description = null, $order = 0, $parent = null, $category = null) {
+		/*******TODO*******/
+	}
+	public function reorder($order) {
+		/*******TODO*******/
 	}
 }
 

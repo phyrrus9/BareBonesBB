@@ -1,6 +1,4 @@
-<?php
-
-/* 
+/*
         DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
                     Version 2, December 2004 
 
@@ -14,19 +12,25 @@
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
- */
-
-/*
-include_once 'Classes/sessionManager.php';
-include 'Classes/permissionManager.php';
-include_once 'Classes/forumManager.php';
-include_once 'Classes/forum.php';
-include 'Classes/post.php';
-include_once 'Classes/postManager.php';
-include_once 'Classes/user.php';
-
-$SM = new sessionManager();
-$PM = new permissionManager();
-$FM = new forumManager();
 */
-?>
+/* 
+    Created on : Jun 9, 2016, 1:48:45 PM
+    Author     : phyrrus9
+*/
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+}
+input.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+}

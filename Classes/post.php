@@ -22,11 +22,12 @@
  * @author phyrrus9
  */
 
-require_once 'DBManager.php';
-require_once 'user.php';
-require_once 'forum.php';
-require_once 'sessionManager.php';
-require_once 'permissionManager.php';
+if (!class_exists('permissionManager')) {
+	include 'Classes/permissionManager.php';
+}
+if (!class_exists('user')) {
+	include 'Classes/user.php';
+}
 
 class post {
 	public $pid;
@@ -61,6 +62,7 @@ class post {
 		if ($this->SM->poke() && $this->PM->can("view")) {
 			$query = "SELECT pid, fid, uid, whendt, parentpid, msgtitle, message, locked " .
 				    "FROM posts WHERE pid = $pid";
+			//die($query);
 			$this->DB->connect();
 			$data = $this->DB->query($query)[0];
 			$this->pid = $data['pid'];
@@ -133,8 +135,8 @@ class post {
 		$fid = $this->forum->fid;
 		$uid = $this->SM->uid;
 		$parent = $this->pid;
-		$query = "INSERT INTO posts(fid, uid, parentpid, message) VALUES($fid, $uid, $parent, '$message');";
-		$check = "SELECT pid FROM posts WHERE fid = $fid AND uid = $uid AND parentpid = $parent AND message = '$message';";
+		$query = "INSERT INTO posts(uid, parentpid, message) VALUES($uid, $parent, '$message');";
+		$check = "SELECT pid FROM posts WHERE uid = $uid AND parentpid = $parent AND message = '$message';";
 		$this->DB->connect();
 		$this->DB->statement($query);
 		$pid = $this->DB->query($check)[0]['pid'];
@@ -198,7 +200,7 @@ class post {
 		}
 		$pid = $this->pid;
 		$fid = $forum->fid;
-		$query = "UPDATE posts SET fid = $fid WHERE pid = $pid OR parentpid = $pid;";
+		$query = "UPDATE posts SET fid = $fid WHERE pid = $pid;";
 		$this->DB->connect();
 		$this->DB->statement($query);
 		$this->DB->disconnect();

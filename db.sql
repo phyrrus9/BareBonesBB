@@ -93,8 +93,8 @@ DROP TABLE IF EXISTS `posts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `posts` (
-  `pid` int(11) NOT NULL,
-  `fid` int(11) NOT NULL,
+  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `fid` int(11) DEFAULT NULL,
   `uid` int(11) NOT NULL,
   `whendt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `parentpid` int(11) DEFAULT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE `posts` (
   `message` varchar(8192) DEFAULT NULL,
   `locked` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (0,1,0,'2016-06-08 14:19:55',NULL,'Hello, World!','This is the first post, enjoy',0);
+INSERT INTO `posts` VALUES (4,1,0,'2016-06-09 15:09:48',NULL,'Test post','...what fun',0);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-08 18:51:17
+-- Dump completed on 2016-06-09 15:09:57

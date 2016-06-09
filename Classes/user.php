@@ -21,44 +21,42 @@
  *
  * @author phyrrus9
  */
-
-require_once 'DBManager.php';
-
-class user {
-	public $uid;
-	public $username;
-	public $email;
-	private $DB;
-	public function __construct()
-	{
-		$this->uid = -1;
-		$this->username = null;
-		$this->email = null;
-		$this->DB = new DBManager();
+if (!class_exists('user')) {
+	class user {
+		public $uid;
+		public $username;
+		public $email;
+		private $DB;
+		public function __construct()
+		{
+			$this->uid = -1;
+			$this->username = null;
+			$this->email = null;
+			$this->DB = new DBManager();
+		}
+		public function load($uid)
+		{
+			$ret = array();
+			$query = "SELECT uid, username, email FROM users WHERE uid = $uid;";
+			$this->DB->connect();
+			$data = $this->DB->query($query)[0];
+			$this->uid = $data['uid'];
+			$this->username = $data['username'];
+			$this->email = $data['email'];
+			$ret['uid'] = $data['uid'];
+			$ret['username'] = $data['username'];
+			$ret['email'] = $data['email'];
+			$this->DB->disconnect();
+			return $ret;
+		}
+		public function loadusername($username)
+		{
+			$this->DB->connect();
+			$query = "SELECT uid FROM users WHERE username = $username;";
+			$uid = $this->DB->query($query)[0]['uid'];
+			$this->DB->disconnect();
+			return $this->load($uid);
+		}
 	}
-	public function load($uid)
-	{
-		$ret = array();
-		$query = "SELECT uid, username, email FROM users WHERE uid = $uid;";
-		$this->DB->connect();
-		$data = $this->DB->query($query)[0];
-		$this->uid = $data['uid'];
-		$this->username = $data['username'];
-		$this->email = $data['email'];
-		$ret['uid'] = $data['uid'];
-		$ret['username'] = $data['username'];
-		$ret['email'] = $data['email'];
-		$this->DB->disconnect();
-		return ret;
-	}
-	public function loadusername($username)
-	{
-		$this->DB->connect();
-		$query = "SELECT uid FROM users WHERE username = $username;";
-		$uid = $this->DB->query($query)[0]['uid'];
-		$this->DB->disconnect();
-		return $this->load($uid);
-	}
-}
-
+}	
 ?>

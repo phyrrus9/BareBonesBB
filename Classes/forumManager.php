@@ -22,43 +22,42 @@
  * @author phyrrus9
  */
 
-require_once 'forum.php';
-require_once 'DBManager.php';
-
-class forumManager {
-	private $DB;
-	private $categories;
-	private $lastRefresh;
-	public function __construct()
-	{
-		$this->DB = new DBManager();
-		$this->categories = null;
-		$this->lastRefresh = 0;
-	}
-	public function load()
-	{
-		if ($this->categories != null) {
+if (!class_exists('forumManager')) {
+	class forumManager {
+		private $DB;
+		private $categories;
+		private $lastRefresh;
+		public function __construct()
+		{
+			$this->DB = new DBManager();
 			$this->categories = null;
+			$this->lastRefresh = 0;
 		}
-		$this->categories = array();
-		$query = "SELECT fid FROM forums WHERE category = 1;";
-		$this->DB->connect();
-		$data = $this->DB->query($query);
-		foreach ($data as $fid) {
-			$fid = $fid['fid'];
-			$tmp = new forum();
-			$tmp->load($fid);
-			array_push($this->categories, $tmp);
+		public function load()
+		{
+			if ($this->categories != null) {
+				$this->categories = null;
+			}
+			$this->categories = array();
+			$query = "SELECT fid FROM forums WHERE category = 1;";
+			$this->DB->connect();
+			$data = $this->DB->query($query);
+			foreach ($data as $fid) {
+				$fid = $fid['fid'];
+				$tmp = new forum();
+				$tmp->load($fid);
+				array_push($this->categories, $tmp);
+			}
+			$this->lastRefresh = time();
 		}
-		$this->lastRefresh = time();
+		public function getForums()
+		{
+			if ((time() - (60 * 5)) > $this->lastRefresh) {
+				$this->load();
+			}
+			return $this->categories;
+		}
 	}
-	public function getForums()
-	{
-		if ((time() - (60 * 5)) > $this->lastRefresh) {
-			$this->load();
-		}
-		return $this->categories;
-	}
+	$FM = new forumManager();
 }
-
 ?>

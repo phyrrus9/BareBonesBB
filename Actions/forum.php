@@ -1,4 +1,4 @@
-<?php
+<?php namespace Actions\forum;
 
 /* 
         DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
@@ -16,17 +16,11 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
-/*
-include_once 'Classes/sessionManager.php';
-include 'Classes/permissionManager.php';
-include_once 'Classes/forumManager.php';
-include_once 'Classes/forum.php';
-include 'Classes/post.php';
-include_once 'Classes/postManager.php';
-include_once 'Classes/user.php';
+if (!defined("ACTION_forum")) {
+	define("ACTION_forum", "INCLUDED");
+	
+	function action_forum($params, $user) {
+	}
+}
 
-$SM = new sessionManager();
-$PM = new permissionManager();
-$FM = new forumManager();
-*/
 ?>

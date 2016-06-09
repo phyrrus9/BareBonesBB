@@ -16,17 +16,8 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
-/*
-include_once 'Classes/sessionManager.php';
-include 'Classes/permissionManager.php';
-include_once 'Classes/forumManager.php';
-include_once 'Classes/forum.php';
-include 'Classes/post.php';
-include_once 'Classes/postManager.php';
-include_once 'Classes/user.php';
-
-$SM = new sessionManager();
-$PM = new permissionManager();
-$FM = new forumManager();
-*/
 ?>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="stylesheet.css">
+</head>

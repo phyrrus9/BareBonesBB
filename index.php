@@ -17,7 +17,7 @@
 <?php
 	session_start();
 	require_once 'config.php';
-	include 'globals.php'
+	include_once 'globals.php'
 ?>
 <html>
 	<head>

@@ -24,57 +24,59 @@
 
 require_once 'config.php';
 
-class DBManager {
-	private $server;
-	private $port;
-	private $username;
-	private $password;
-	private $database;
-	private $db;
-	public function __construct()
-	{
-		global $DB_SETTINGS;
-		$this->server = $DB_SETTINGS['server'];
-		$this->port = $DB_SETTINGS['port'];
-		$this->username = $DB_SETTINGS['username'];
-		$this->password = $DB_SETTINGS['password'];
-		$this->database = $DB_SETTINGS['database'];
-	}
-	public function connect()
-	{
-		$this->db = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port);
-		return $this->db != null;
-	}
-	public function disconnect()
-	{
-		if ($this->db != null)
+if (!class_exists('DBManager')) {
+	class DBManager {
+		private $server;
+		private $port;
+		private $username;
+		private $password;
+		private $database;
+		private $db;
+		public function __construct()
 		{
-			mysqli_close($this->db);
+			global $DB_SETTINGS;
+			$this->server = $DB_SETTINGS['server'];
+			$this->port = $DB_SETTINGS['port'];
+			$this->username = $DB_SETTINGS['username'];
+			$this->password = $DB_SETTINGS['password'];
+			$this->database = $DB_SETTINGS['database'];
 		}
-		$this->db = null;
-	}
-	public function statement($query)
-	{
-		mysqli_query($this->db, $query);
-	}
-	public function query($query)
-	{
-		$ret = array();
-		$res = mysqli_query($this->db, $query);
-		//$ret = mysqli_fetch_all($res);
-		$cols = mysqli_fetch_fields($res);
-		while (($row = mysqli_fetch_row($res)) != null)
+		public function connect()
 		{
-			$tmp = array();
-			for ($i = 0; $i < count($row); $i++)
+			$this->db = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port);
+			return $this->db != null;
+		}
+		public function disconnect()
+		{
+			if ($this->db != null)
 			{
-				$colName = $cols[$i]->name;
-				$tmp[$colName] = $row[$i];
+				mysqli_close($this->db);
 			}
-			array_push($ret, $tmp);
+			$this->db = null;
 		}
-		return $ret;
+		public function statement($query)
+		{
+			mysqli_query($this->db, $query);
+		}
+		public function query($query)
+		{
+			$ret = array();
+			$res = mysqli_query($this->db, $query);
+			//$ret = mysqli_fetch_all($res);
+			$cols = mysqli_fetch_fields($res);
+			while (($row = mysqli_fetch_row($res)) != null)
+			{
+				$tmp = array();
+				for ($i = 0; $i < count($row); $i++)
+				{
+					$colName = $cols[$i]->name;
+					$tmp[$colName] = $row[$i];
+				}
+				array_push($ret, $tmp);
+			}
+			return $ret;
+		}
 	}
+	$DB = new DBManager();
 }
-
 ?>
