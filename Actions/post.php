@@ -6,6 +6,9 @@ if (!class_exists('forum')) {
 if (!class_exists('post')) {
 	include 'Classes/post.php';
 }
+if (!class_exists('post')) {
+	include 'Classes/post.php';
+}
 if (!class_exists('permissionManager')) {
 	include 'Classes/permissionManager.php';
 }
@@ -69,20 +72,14 @@ if (!defined("ACTION_post")) {
 		<?php
 	}
 	function action_submitpost($forum, $title, $message, $user, $parent = null) {
-		global $DB;
 		global $PM;
 		$reply = $parent != null;
-		$DB->connect();
+		$cpost = new \post();
 		if ($PM->can("post") && $reply != true) {
-			$query = "INSERT INTO posts(fid, uid, msgtitle, message) " .
-				    "VALUES($forum->fid, $user->uid, '$title', '$message');";
-			$DB->statement($query);
+			$cpost->create($forum, $title, $message);
 		} else if ($PM->can("reply") && $reply == true) {
-			$query = "INSERT INTO posts(parentpid, uid, message) " .
-				    "VALUES($parent->pid, $user->uid, '$message');";
-			$DB->statement($query);
+			$parent->reply($message);
 		}
-		$DB->disconnect();
 		?><script>window.location.assign("viewForum.php?fid=<?php echo $forum->fid; ?>")</script><?php
 	}
 }

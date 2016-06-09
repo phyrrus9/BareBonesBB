@@ -43,6 +43,27 @@ if (!defined("FUNC_navigation")) {
 			echo("<a href=\"action.php?type=forum&fid=$fid&action=delete\" class=\"button\">Delete $forum->name</a> ");
 		}
 	}
+	function display_postNavigation($pid) {
+		$curPost = new post();
+		$curPost->load($pid, false);
+		$fid = $curPost->forum->fid;
+		global $SM;
+		$pm = new permissionManager();
+		if (!$SM->poke()) { return false; }
+		$owns = $curPost->user->uid == $SM->uid;
+		$candelete = $pm->can("delete") ? true : $pm->can("delete_own") && $owns ? true : false;
+		$canlock = ($pm->can("lock") ? true : $pm->can("lock_own") && $owns ? true : false) && !$curPost->locked;
+		$canunlock = ($pm->can("unlock") ? true : $pm->can("unlock_own") && $owns ? true : false) && $curPost->locked;
+		if (!$curPost->locked || $canunlock) {
+			echo("<a href=\"action.php?type=post&fid=$fid&parent=$pid&action=new\" class=\"button\">Reply</a> ");
+		} if ($candelete) {
+			echo("<a href=\"action.php?type=post&pid=$pid&action=delete\" class=\"button\">Delete</a> ");
+		} if ($canlock) {
+			echo("<a href=\"action.php?type=post&pid=$pid&action=lock\" class=\"button\">Lock</a> ");
+		} if ($canunlock) {
+			echo("<a href=\"action.php?type=post&pid=$pid&action=unlock\" class=\"button\">Unock</a> ");
+		}
+	}
 }
 
 ?>

@@ -57,12 +57,11 @@ class post {
 		$this->SM = new sessionManager();
 		$this->PM = new permissionManager();
 	}
-	public function load($pid)
+	public function load($pid, $recursive = true)
 	{
 		if ($this->SM->poke() && $this->PM->can("view")) {
 			$query = "SELECT pid, fid, uid, whendt, parentpid, msgtitle, message, locked " .
-				    "FROM posts WHERE pid = $pid";
-			//die($query);
+				    "FROM posts WHERE pid = $pid;";
 			$this->DB->connect();
 			$data = $this->DB->query($query)[0];
 			$this->pid = $data['pid'];
@@ -86,19 +85,19 @@ class post {
 	{
 		$ret = null;
 		if ($this->SM->poke() == false || $this->PM->can("view") == false) {
+			die("ERR");
 			return null;
 		} else if ($pid < 0) {
+			die("ERR");
 			return null;
 		}
-		$query = "SELECT pid FROM posts WHERE parentpid = $pid ORDER BY whendt DESC;";
+		$query = "SELECT pid FROM posts WHERE parentpid = $pid ORDER BY whendt;";
 		$this->DB->connect();
 		$data = $this->DB->query($query);
 		if (count($data) > 0) {
 			$ret = array();
 			foreach ($data as $replypid) {
-				$tmp = new post();
-				$tmp->load($replypid);
-				array_push($ret, $tmp);
+				array_push($ret, $replypid['pid']);
 			}
 		}
 		$this->DB->disconnect();
