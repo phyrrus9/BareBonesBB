@@ -30,7 +30,7 @@ CREATE TABLE `forums` (
   `parent` int(11) DEFAULT NULL,
   `category` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`fid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `forums` (
 
 LOCK TABLES `forums` WRITE;
 /*!40000 ALTER TABLE `forums` DISABLE KEYS */;
-INSERT INTO `forums` VALUES (1,0,'Default Category',NULL,NULL,1),(2,0,'Default Forum','Just put it all here',1,0),(3,0,'New Forum',NULL,1,0),(4,2,'New Forum #2',NULL,1,0),(5,1,'New Category',NULL,NULL,1),(6,0,'Another','Hey look!',5,0),(7,0,'Subforum',NULL,2,0);
+INSERT INTO `forums` VALUES (8,0,'Announcements',NULL,NULL,1),(9,1,'News',NULL,NULL,1),(10,2,'General',NULL,NULL,1),(12,0,'Board Announcements','Board wide announcements',8,0),(13,1,'Introductions','Break the ice!',8,0),(14,2,'Suggestions','Suggest a new feature',8,0),(15,0,'Achievements','Do something noteworthy?',9,0),(16,1,'Internet','Whats new online?',9,0),(17,2,'Local News','What happened next door',9,0),(18,3,'World News','WWIII started?',9,0),(19,0,'The Lounge','Mildly off topic discussion',10,0),(20,1,'/dev/random','Complete random talk',10,0);
 /*!40000 ALTER TABLE `forums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +135,7 @@ CREATE TABLE `posts` (
   `message` varchar(8192) DEFAULT NULL,
   `locked` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +144,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (4,2,1,'2016-06-09 15:09:48',NULL,'Test post','...what fun',0),(13,NULL,1,'2016-06-10 14:21:31',4,'RE: Test post','blaaaaaaaah',0);
+INSERT INTO `posts` VALUES (25,2,1,'2016-06-10 19:29:15',NULL,'Title','Message',0),(26,2,1,'2016-06-10 19:29:46',NULL,'Title2','Message',0),(34,NULL,1,'2016-06-10 19:47:48',26,'RE: Title2','Hello, World!',0),(35,12,1,'2016-06-10 20:06:37',NULL,'Hello, World!','This is the first post!',0);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-10 16:17:28
+-- Dump completed on 2016-06-10 20:22:56

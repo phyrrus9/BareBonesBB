@@ -90,9 +90,6 @@ function display_postList($fid) {
 	$forum = new forum();
 	$forum->load($fid);
 	$posts = $PTM->load($forum);
-	echo("<pre>");
-	//var_dump($posts);
-	echo("</pre>");
 	foreach ($posts as $post) {
 		$pid = $post->pid;
 		$username = $post->user->username;

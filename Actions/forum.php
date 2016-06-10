@@ -1,5 +1,5 @@
 <?php namespace Actions\forum;
-include 'globalHeader.php';
+
 if (!class_exists('forum')) {
 	include 'Classes/forum.php';
 }
@@ -28,11 +28,11 @@ if (!class_exists('DBManager')) {
 if (!defined("ACTION_forum")) {
 	define("ACTION_forum", "INCLUDED");
 	
-	function action_forum($params, $user) {
+	function action_forum($params) {
 		$action = $params['action'];
 		if (!strcmp($action, "new")) {
 			$parent = null;
-			if (isset($params['fid'])) {
+			if (isset($params['fid']) && $params['fid'] != -1) {
 				$parent = new \forum();
 				$parent->load($params['fid']);
 			}

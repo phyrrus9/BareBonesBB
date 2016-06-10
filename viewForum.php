@@ -34,6 +34,7 @@
         <title>Viewing forum</title>
     </head>
     <body>
+	   <div class="navleft"> <a href="viewForum.php" class="button">Forum Index</a>
 	   <?php
 		if ($fid < 0) {
 			display_forumNavigation();

@@ -36,40 +36,64 @@ if (!defined("FUNC_navigation")) {
 		if ($forum != null) {
 			$forum->load($fid);
 			$type = "Forum";
+			$entry = "<td class=\"rightbutton\">";
+			$exit = "</td>";
 		} else {
 			$type = "Category";
+			$entry = $exit = "";
 		}
 		$pm = new permissionManager();
 		if (!$pm->can("view")) {
 			return;
-		} if ($pm->can("post") && $fid != -1 && !$forum->category) {
-			echo("<a href=\"action.php?type=post&fid=$fid&action=new\" class=\"button\">New Post in $forum->name</a> ");
-		} if ($pm->can("delete_forum") && $fid != -1) {
-			echo("<a href=\"action.php?type=forum&fid=$fid&action=delete\" class=\"button\">Delete $forum->name</a> ");
-		} if ($pm->can("create_forum")) {
-			echo("<a href=\"action.php?type=forum&fid=$fid&action=new\" class=\"button\">New $type</a> ");
 		}
+		?> <table style="display: inline-table; float: right"><tr> <?php
+		if ($pm->can("post") && $fid != -1 && !$forum->category) {
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&action=new\" class=\"button\">New Post in $forum->name</a></td>");
+		} if ($pm->can("delete_forum") && $fid != -1) {
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=forum&fid=$fid&action=delete\" class=\"button\">Delete $forum->name</a></td>");
+		} if ($pm->can("create_forum")) {
+			echo("$entry<a href=\"action.php?type=forum&fid=$fid&action=new\" class=\"button\">New $type</a>$exit");
+		}?></tr></table><?php
 	}
 	function display_postNavigation($pid) {
 		$curPost = new post();
 		$curPost->load($pid, false);
 		$fid = $curPost->forum->fid;
+		$level = 0;
+		if ($fid == null) {
+			$fid = -1;
+		}
 		global $SM;
+		$origPost = $curPost;
+		while ($origPost->parent != null) {
+			$origPost = $origPost->parent;
+			$level++;
+		}
+		$origpid = $origPost->pid;
 		$pm = new permissionManager();
 		if (!$SM->poke()) { return false; }
 		$owns = $curPost->user->uid == $SM->uid;
 		$candelete = $pm->can("delete") ? true : $pm->can("delete_own") && $owns ? true : false;
 		$canlock = ($pm->can("lock") ? true : $pm->can("lock_own") && $owns ? true : false) && !$curPost->locked;
 		$canunlock = ($pm->can("unlock") ? true : $pm->can("unlock_own") && $owns ? true : false) && $curPost->locked;
+		?> <table class="forumList" style="display: inline-table; float: right;"><tr> <?php
 		if (!$curPost->locked || $canunlock) {
-			echo("<a href=\"action.php?type=post&fid=$fid&parent=$pid&action=new\" class=\"button\">Reply</a> ");
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&parent=$origpid&action=new\" class=\"button\">Reply</a></td>");
+			if ($curPost->parent != null) {
+				$parentpid = $curPost->parent->pid;
+				echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&parent=$parentpid&action=new\" class=\"button\">Reply Level $level</a></td>");
+			}
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&parent=$pid&action=new\" class=\"button\">Comment</a></td><td>&emsp;</td>");
 		} if ($candelete) {
-			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=delete\" class=\"button\">Delete</a> ");
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&pid=$pid&action=delete\" class=\"button\">Delete</a></td>");
 		} if ($canlock) {
-			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=lock\" class=\"button\">Lock</a> ");
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&pid=$pid&action=lock\" class=\"button\">Lock</a></td>");
 		} if ($canunlock) {
-			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=unlock\" class=\"button\">Unock</a> ");
-		}
+			echo("<td class=\"rightbutton\"><a href=\"action.php?type=post&fid=$fid&pid=$pid&action=unlock\" class=\"button\">Unock</a></td>");
+		} ?></tr></table><?php
+	}
+	function redirect_page($page) {
+		echo("<head><script>window.location.assign(\"$page\")</script></head>");
 	}
 }
 

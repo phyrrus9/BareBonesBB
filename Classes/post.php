@@ -115,7 +115,7 @@ class post {
 		$this->DB->connect();
 		$this->DB->statement($query);
 		$check = "SELECT pid FROM posts WHERE fid = $fid AND uid = $uid AND msgtitle = '$msgtitle' AND message = '$message';";
-		$pid = $this->DB->query($check)[0]['uid'];
+		$pid = $this->DB->query($check)[0]['pid'];
 		$this->DB->disconnect();
 		$ret = new post();
 		$ret->load($pid);
@@ -184,7 +184,15 @@ class post {
 			return false;
 		}
 		$pid = $this->pid;
-		$query = "DELETE FROM posts WHERE pid = $pid OR parentpid = $pid;";
+		$query = "DELETE FROM posts WHERE pid = $pid";
+		if ($this->replies != null) {
+			foreach($this->replies as $replypid) {
+				$reply = new post();
+				$reply->load($replypid);
+				$reply->delete();
+			}
+		}
+		echo("<pre>$query</pre>");
 		$this->DB->connect();
 		$this->DB->statement($query);
 		$this->DB->disconnect();

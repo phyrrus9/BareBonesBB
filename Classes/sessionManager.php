@@ -50,8 +50,7 @@ if (!class_exists('sessionManager')) {
 			$data = $result[0];
 			$_SESSION['uid'] = $data['uid'];
 			$_SESSION['username'] = $in_username;
-			$this->poke(true);
-			echo("Login successful!");
+			return $this->poke(true);
 		}
 		public function logout()
 		{
@@ -59,16 +58,13 @@ if (!class_exists('sessionManager')) {
 			$_SESSION['uid'] = -1;
 			$_SESSION['username'] = "nil";
 			$_SESSION['sessionExpires'] = 0;
-			session_abort();
 			echo("logged out");
 		}
 		public function poke($ignoreTimeout = false)
 		{
-			//die("poke");
 			$this->session();
 			$this->load();
 			$curtime = time();
-			//var_dump($this);
 			if ($curtime >= $this->expires && !$ignoreTimeout){
 				$this->logout();
 				return false;

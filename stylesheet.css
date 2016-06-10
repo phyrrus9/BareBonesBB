@@ -41,12 +41,25 @@ td.header {
 }
 table.forumList {
     padding-left: 2%;
-    width: auto;
 }
 td.data {
     padding-left: 25px;
-    padding-right: 85px;
+    padding-right: 35px;
+    width: 300px;
+}
+td.rightbutton {
+    padding-left: 15px;
 }
 a {
     color: black;
+}
+div.navleft {
+    display: inline-block;
+    float: left;
+}
+div.navright {
+    display: inline-block;
+    float: right;
+}
+div.hardleft {
 }

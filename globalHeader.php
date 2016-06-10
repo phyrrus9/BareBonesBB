@@ -16,12 +16,19 @@
   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
+if (!class_exists('sessionManager')) {
+	include 'Classes/sessionManager.php';
+}
+$SM->poke();
+$username = $SM->username;
+
 ?>
 
 <head>
 	<link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
 <body>
-	<a href="viewForum.php" class="button">Forum Index</a>&emsp;
-	<a href="action.php?type=user&action=logout" class="button">Log Out</a>&emsp;
+    <div class="navright">
+	<a href="action.php?type=user&action=logout" class="button">Log Out <?php echo $username; ?></a>&emsp;
+    </div>
 </body>

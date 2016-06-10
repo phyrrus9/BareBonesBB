@@ -57,7 +57,8 @@ class forum
 		$query = "SELECT fid, displayorder, name, description, parent, category " .
 			    "FROM forums WHERE fid = $fid ORDER BY displayorder;";
 		$this->DB->connect();
-		$data = $this->DB->query($query)[0];
+		$data = $this->DB->query($query);
+		if (!is_array($data) && count($data) > 0) { return false; } else { $data = $data[0]; }
 		$this->fid = $data['fid'];
 		$this->order = $data['displayorder'];
 		$this->name = $data['name'];
@@ -82,7 +83,7 @@ class forum
 		$data = $this->DB->query($query);
 		$this->children = null;
 		$this->DB->disconnect();
-		if (count($data) > 0) {
+		if (count($data) > 0 && is_array($data)) {
 			$ret = array();
 			foreach ($data as $tmpfid) {
 				$tmpfid = $tmpfid['fid'];
@@ -98,10 +99,8 @@ class forum
 		return $ret;
 	}
 	public function delete() {
-		foreach ($this->children as $childfid) {
-			$tmp = new forum();
-			$tmp->load($childfid);
-			$tmp->delete();
+		foreach ($this->children as $child) {
+			$child->delete();
 		}
 		$this->DB->connect();
 		$this->DB->statement("DELETE FROM forums WHERE fid = $this->fid;");

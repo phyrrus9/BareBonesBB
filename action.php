@@ -18,15 +18,7 @@
 
 include 'Actions/post.php';
 include 'Actions/forum.php';
-if (!class_exists('permissionManager')) {
-	include 'Classes/permissionManager.php';
-}
-if (!class_exists('sessionManager')) {
-	include 'Classes/sessionManager.php';
-}
-if (!class_exists('user')) {
-	include 'Classes/user.php';
-}
+include 'Actions/user.php';
 
 if (!defined("PAGE_action")) {
 	define("PAGE_action", "INCLUDED");
@@ -38,17 +30,13 @@ if (!defined("PAGE_action")) {
 	foreach ($_POST as $key => $val) {
 		$params[$key] = $val;
 	}
-	global $PM;
-	global $SM;
-	$PM->reload();
-	$SM->load();
-	$user = new user();
-	$user->load($SM->uid);
 	$type = $params['type'];
 	if (!strcmp($type, "post")) {
-		\Actions\post\action_post($params, $user);
+		\Actions\post\action_post($params);
 	} else if (!strcmp($type, "forum")) {
-		\Actions\forum\action_forum($params, $user);
+		\Actions\forum\action_forum($params);
+	} else if (!strcmp($type, "user")) {
+		\Actions\user\action_user($params);
 	}
 }
 ?>

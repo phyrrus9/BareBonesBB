@@ -19,6 +19,10 @@
 	require_once 'config.php';
 	include_once 'globals.php';
 	include 'Classes/sessionManager.php';
+	include 'Functions/navigation.php';
+	if ($SM->poke()) {
+		redirect_page("viewForum.php");
+	}
 ?>
 <html>
 	<head>
@@ -26,11 +30,12 @@
 		<title></title>
 	</head>
 	<body>
-	<?php
-		$SM->logout();
-		$SM->login($_GET['u'], $_GET['p']);
-	?>
-	    <br />
+	    <h1>Board Entry Page</h1>
 	    <hr />
+	    <form action="action.php?type=user&action=login" method="POST">
+		   <label>Username</label>&emsp;<input type="text" name="username" /><br />
+		   <label>Password</label>&emsp;<input type="password" name="password" /><br />
+		   <input type="submit" value="Log In" />
+	    </form>
 	</body>
 </html>

@@ -1,5 +1,5 @@
 <?php namespace Actions\post;
-include 'globalHeader.php';
+
 if (!class_exists('forum')) {
 	include 'Classes/forum.php';
 }
@@ -31,7 +31,7 @@ if (!class_exists('DBManager')) {
 if (!defined("ACTION_post")) {
 	define("ACTION_post", "INCLUDED");
 	
-	function action_post($params, $user) {
+	function action_post($params) {
 		if (!strcmp($params['action'], "new")) {
 			$parent = null;
 			if (isset($params['parent'])) {
@@ -63,9 +63,13 @@ if (!defined("ACTION_post")) {
 			$pid = $params['pid'];
 			$fid = $params['fid'];
 			$post = new \post();
-			$forum = new \forum();
+			$forum = $fid == -1 ? null : new \forum();
 			$post->load($pid);
-			$forum->load($fid);
+			if ($forum != null) {
+				$forum->load($fid);
+			} else {
+				$post->forum = null;
+			}
 			\Actions\post\action_delete($forum, $post);
 		}
 	}
@@ -109,9 +113,10 @@ if (!defined("ACTION_post")) {
 	function action_delete($forum, $post) {
 		global $PM;
 		if ($PM->can("delete") || ($PM->can("delete_own") && $post->owns)) {
+			//die("deleting");
 			$post->delete();
 		}
-		\Actions\post\redirect_forum($forum);
+		//\Actions\post\redirect_forum($forum);
 	}
 	function redirect_forum($forum) {
 		?><script>window.location.assign("viewForum.php?fid=<?php echo $forum->fid; ?>")</script><?php
