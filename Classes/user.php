@@ -70,9 +70,11 @@ if (!class_exists('user')) {
 				    "$p_delete_own,$p_warn,$p_manage_flags,$p_move,$p_lock," .
 				    "$p_delete,$p_ban,$p_moderator);";
 			$query2 = "INSERT INTO override_userqueue(uid) VALUES($uid);";
+			$query3 = "INSERT INTO permissions(uid) VALUES($uid);";
 			$this->DB->connect();
 			$this->DB->statement($query);
 			$this->DB->statement($query2);
+			$this->DB->statement($query3);
 			$this->DB->disconnect();
 		}
 	}

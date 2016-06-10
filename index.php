@@ -17,7 +17,8 @@
 <?php
 	session_start();
 	require_once 'config.php';
-	include_once 'globals.php'
+	include_once 'globals.php';
+	include 'Classes/sessionManager.php';
 ?>
 <html>
 	<head>
@@ -26,27 +27,8 @@
 	</head>
 	<body>
 	<?php
-		if ($SM->poke() == false)
-		{
-			$SM->login("admin", "alpine");
-		}
-		$forums = $FM->getForums();
-		echo("<pre>");
-		var_dump($forums);
-		echo("</pre>");
-		/*foreach ($forums as $category) {
-			$catName = $category->name;
-			?>
-	    <h2><?php echo("$catName"); ?></h2>
-			<?php
-			$subforums = $category->children;
-			foreach ($subforums as $childfid) {
-				$forum = new forum();
-				$forum->load($childfid, false);
-				$forumName = $forum->name;
-				?><h3>&nbsp;&nbsp;&nbsp;<?php echo("$forumName $childfid"); ?></h3><br /><?php
-			}
-		}*/
+		$SM->logout();
+		$SM->login($_GET['u'], $_GET['p']);
 	?>
 	    <br />
 	    <hr />

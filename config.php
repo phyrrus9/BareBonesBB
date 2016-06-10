@@ -23,7 +23,7 @@ $DB_SETTINGS = array(
     "password"		=>	"alpine",
     "database"		=>	"BareBonesBB"
 );
-$UPGRADE_SETTINGS = array(
+$UPGRADE_SETTINGS = array( //post count that upgrade occurs, -1 to disable
     "post"		=>	10,
     "reply"		=>	0,
     "lock_own"		=>	50,
@@ -36,13 +36,6 @@ $UPGRADE_SETTINGS = array(
     "delete"		=>	600,
     "ban"			=>	750,
     "moderator"	=>	1000
-);
-$REGISTRATION_SETTINGS = array(
-    "view"		=>	true,
-    "post"		=>	false,
-    "reply"		=>	true,
-    "lock_own"		=>	false,
-    "delete_own"	=>	false
 );
 
 ?>

@@ -49,6 +49,7 @@ if (!class_exists('permissionManager')) {
 					"can_manage_flags, can_warn, can_ban, can_create_user, can_delete_user, " .
 					"can_create_forum, can_delete_forum, is_moderator, is_admin, is_super " .
 					"FROM permissions WHERE uid = $this->uid;";
+			//die($query);
 			$this->DB = new DBManager();
 			$this->DB->connect();
 			$res = $this->DB->query($query);

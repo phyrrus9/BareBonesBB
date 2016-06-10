@@ -21,6 +21,9 @@
  *
  * @author phyrrus9
  */
+if (!class_exists('DBManager')) {
+	include 'Classes/DBManager.php';
+}
 if (!class_exists('sessionManager')) {
 	class sessionManager {
 		public $uid = -1;
@@ -57,12 +60,15 @@ if (!class_exists('sessionManager')) {
 			$_SESSION['username'] = "nil";
 			$_SESSION['sessionExpires'] = 0;
 			session_abort();
+			echo("logged out");
 		}
 		public function poke($ignoreTimeout = false)
 		{
+			//die("poke");
 			$this->session();
 			$this->load();
 			$curtime = time();
+			//var_dump($this);
 			if ($curtime >= $this->expires && !$ignoreTimeout){
 				$this->logout();
 				return false;
