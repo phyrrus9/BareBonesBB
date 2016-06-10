@@ -48,7 +48,7 @@ if (!defined("PAGE_action")) {
 	if (!strcmp($type, "post")) {
 		\Actions\post\action_post($params, $user);
 	} else if (!strcmp($type, "forum")) {
-		\Actions\post\action_forum($params, $user);
+		\Actions\forum\action_forum($params, $user);
 	}
 }
 ?>

@@ -44,15 +44,44 @@ function display_forumList($fid) {
 		?>&nbsp;
 		<a href="viewForum.php?fid=<?php echo $parentForum->fid; ?>"><?php echo $parentForum->name; ?></a><?php
 	}
-	?><h3><?php echo($curForum->name); ?></h3><?php
+	?><br /><b><strong><?php echo($curForum->name); ?>&emsp;&emsp;&emsp;</strong></b><?php
 	display_forumNavigation($fid);
-	echo("<hr width=60% />");
+	echo("<br />");
 	if (count($curForum->children) > 0) { ?>
-	  <h4> <?php
-	foreach ($curForum->children as $childForum) {
-		?>&nbsp;&nbsp;&nbsp;&nbsp;<a href="viewForum.php?fid=<?php echo $childForum->fid; ?>"><?php echo $childForum->name; ?></a><?php
-	}
-	}?></h4><?php
+	  <table class="forumList">
+		 <tr>
+			<td class="header">Name</td>
+		  <?php
+		foreach ($curForum->children as $childForum) {
+			?><td class="data"><a href="viewForum.php?fid=<?php echo $childForum->fid; ?>"><?php echo $childForum->name; ?></a></td><?php
+		}?>
+		</tr>
+		<tr>
+		    <td class="header" >Description</td>
+		<?php
+		foreach ($curForum->children as $childForum) {
+			?><td class="data"><?php echo $childForum->description; ?></td><?php
+		}
+		?>
+		</tr>
+		<tr>
+		    <td class="header">Threads</td>
+		<?php
+		foreach ($curForum->children as $childForum) {
+			?><td class="data"><?php echo $childForum->threadCount(); ?></td><?php
+		}
+		?>
+		</tr>
+		<tr>
+		    <td class="header">Posts</td>
+		<?php
+		foreach ($curForum->children as $childForum) {
+			?><td class="data"><?php echo $childForum->postCount(); ?></td><?php
+		}
+		?>
+		</tr>
+		<?php
+	}?></table><?php
 	display_postList($fid);
 }
 

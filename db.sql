@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `forums`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `forums` (
-  `fid` int(11) NOT NULL,
+  `fid` int(11) NOT NULL AUTO_INCREMENT,
   `displayorder` tinyint(4) DEFAULT '0',
   `name` varchar(64) NOT NULL,
   `description` varchar(128) DEFAULT NULL,
   `parent` int(11) DEFAULT NULL,
   `category` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`fid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,8 +39,41 @@ CREATE TABLE `forums` (
 
 LOCK TABLES `forums` WRITE;
 /*!40000 ALTER TABLE `forums` DISABLE KEYS */;
-INSERT INTO `forums` VALUES (0,0,'Default Category',NULL,NULL,1),(1,0,'Default Forum','Just go ahead and put it all here',0,0);
+INSERT INTO `forums` VALUES (1,0,'Default Category',NULL,NULL,1),(2,0,'Default Forum','Just put it all here',1,0),(3,0,'New Forum',NULL,1,0),(4,2,'New Forum #2',NULL,1,0),(5,1,'New Category',NULL,NULL,1),(6,0,'Another','Hey look!',5,0),(7,0,'Subforum',NULL,2,0);
 /*!40000 ALTER TABLE `forums` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `override_userqueue`
+--
+
+DROP TABLE IF EXISTS `override_userqueue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `override_userqueue` (
+  `p_uid` tinyint(4) NOT NULL DEFAULT '0',
+  `p_post` tinyint(4) NOT NULL DEFAULT '0',
+  `p_reply` tinyint(4) NOT NULL DEFAULT '0',
+  `p_lock_own` tinyint(4) NOT NULL DEFAULT '0',
+  `p_unlock_own` tinyint(4) NOT NULL DEFAULT '0',
+  `p_delete_own` tinyint(4) NOT NULL DEFAULT '0',
+  `p_warn` tinyint(4) NOT NULL DEFAULT '0',
+  `p_manage_flags` tinyint(4) NOT NULL DEFAULT '0',
+  `p_move` tinyint(4) NOT NULL DEFAULT '0',
+  `p_lock` tinyint(4) NOT NULL DEFAULT '0',
+  `p_delete` tinyint(4) NOT NULL DEFAULT '0',
+  `p_ban` tinyint(4) NOT NULL DEFAULT '0',
+  `p_moderator` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `override_userqueue`
+--
+
+LOCK TABLES `override_userqueue` WRITE;
+/*!40000 ALTER TABLE `override_userqueue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `override_userqueue` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -53,8 +86,8 @@ DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `uid` int(11) NOT NULL,
   `can_view` tinyint(4) NOT NULL DEFAULT '1',
-  `can_post` tinyint(4) NOT NULL DEFAULT '1',
-  `can_reply` tinyint(4) NOT NULL DEFAULT '1',
+  `can_post` int(11) NOT NULL DEFAULT '0',
+  `can_reply` int(11) NOT NULL DEFAULT '0',
   `can_lock` tinyint(4) NOT NULL DEFAULT '0',
   `can_unlock` tinyint(4) NOT NULL DEFAULT '0',
   `can_lock_own` tinyint(4) NOT NULL DEFAULT '0',
@@ -81,7 +114,7 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+INSERT INTO `permissions` VALUES (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +135,7 @@ CREATE TABLE `posts` (
   `message` varchar(8192) DEFAULT NULL,
   `locked` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,8 +144,41 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (4,1,0,'2016-06-09 15:09:48',NULL,'Test post','...what fun',0);
+INSERT INTO `posts` VALUES (4,2,1,'2016-06-09 15:09:48',NULL,'Test post','...what fun',0),(13,NULL,1,'2016-06-10 14:21:31',4,'RE: Test post','blaaaaaaaah',0);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userqueue`
+--
+
+DROP TABLE IF EXISTS `userqueue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userqueue` (
+  `p_uid` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_post` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_reply` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_lock_own` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_unlock_own` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_delete_own` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_warn` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_manage_flags` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_move` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_lock` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_delete` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_ban` tinyint(4) NOT NULL DEFAULT '-1',
+  `p_moderator` tinyint(4) NOT NULL DEFAULT '-1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userqueue`
+--
+
+LOCK TABLES `userqueue` WRITE;
+/*!40000 ALTER TABLE `userqueue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `userqueue` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -123,12 +189,12 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `uid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(64) DEFAULT NULL,
   `password` varchar(256) DEFAULT NULL,
   `email` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +203,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (0,'admin','*26F47B878EE2CB233E45DDC0A5F0E4BFE9120112','admin@localhost');
+INSERT INTO `users` VALUES (1,'admin','*26F47B878EE2CB233E45DDC0A5F0E4BFE9120112','admin@localhost'),(2,'test','*94BDCEBE19083CE2A1F959FD02F964C7AF4CFC29','test@localhost');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -150,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-09 15:09:57
+-- Dump completed on 2016-06-10 15:18:12

@@ -31,16 +31,23 @@ if (!class_exists('permissionManager')) {
 
 if (!defined("FUNC_navigation")) {
 	define("FUNC_navigation", "INCLUDED");
-	function display_forumNavigation($fid) {
-		$forum = new forum();
-		$forum->load($fid);
+	function display_forumNavigation($fid = -1) {
+		$forum = $fid == -1 ? null : new forum();
+		if ($forum != null) {
+			$forum->load($fid);
+			$type = "Forum";
+		} else {
+			$type = "Category";
+		}
 		$pm = new permissionManager();
 		if (!$pm->can("view")) {
 			return;
-		} if ($pm->can("post") && !$forum->category) {
+		} if ($pm->can("post") && $fid != -1 && !$forum->category) {
 			echo("<a href=\"action.php?type=post&fid=$fid&action=new\" class=\"button\">New Post in $forum->name</a> ");
-		} if ($pm->can("delete_forum")) {
+		} if ($pm->can("delete_forum") && $fid != -1) {
 			echo("<a href=\"action.php?type=forum&fid=$fid&action=delete\" class=\"button\">Delete $forum->name</a> ");
+		} if ($pm->can("create_forum")) {
+			echo("<a href=\"action.php?type=forum&fid=$fid&action=new\" class=\"button\">New $type</a> ");
 		}
 	}
 	function display_postNavigation($pid) {
@@ -57,11 +64,11 @@ if (!defined("FUNC_navigation")) {
 		if (!$curPost->locked || $canunlock) {
 			echo("<a href=\"action.php?type=post&fid=$fid&parent=$pid&action=new\" class=\"button\">Reply</a> ");
 		} if ($candelete) {
-			echo("<a href=\"action.php?type=post&pid=$pid&action=delete\" class=\"button\">Delete</a> ");
+			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=delete\" class=\"button\">Delete</a> ");
 		} if ($canlock) {
-			echo("<a href=\"action.php?type=post&pid=$pid&action=lock\" class=\"button\">Lock</a> ");
+			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=lock\" class=\"button\">Lock</a> ");
 		} if ($canunlock) {
-			echo("<a href=\"action.php?type=post&pid=$pid&action=unlock\" class=\"button\">Unock</a> ");
+			echo("<a href=\"action.php?type=post&fid=$fid&pid=$pid&action=unlock\" class=\"button\">Unock</a> ");
 		}
 	}
 }

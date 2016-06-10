@@ -21,3 +21,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
+<body>
+	<a href="viewForum.php" class="button">Forum Index</a>&emsp;
+	<a href="action.php?type=user&action=logout" class="button">Log Out</a>&emsp;
+</body>

@@ -38,10 +38,7 @@ if (!defined("FUNC_posts")) {
 	}
 
 	function _p_text_indent($text, $indent) {
-		for ($i = 0; $i < $indent; $i++) {
-			echo "&nbsp;&nbsp;&nbsp";
-		}
-		echo $text;
+		echo $text; //I know...
 	}
 	
 	function display_post($post, $indent = 0) {
@@ -49,11 +46,12 @@ if (!defined("FUNC_posts")) {
 		$username = $post->user->username;
 		$when = $post->when;
 		$hrwidth = 95 - ($indent * 5);
-		_p_text_indent("<a href=\"viewUser.php?uid=$uid\">$username</a> | echo $when &nbsp;&nbsp;&nbsp;", $indent);
+		$divpad = ($indent * 1);
+		echo("<div class=\"post\" style=\"padding-left:".$divpad."%;\">");
+		echo("<a href=\"viewUser.php?uid=$uid\">$username</a> | ");
+		echo("<a href=\"viewPost.php?pid=$post->pid\">$when</a> &nbsp;&nbsp;&nbsp;");
 		display_postNavigation($post->pid);
-		echo ("<br />");
-		_p_text_indent($post->message, $indent + 1);
-		echo("<hr width=\"$hrwidth%\" />");
+		echo("<br />" . $post->message . "</div>");
 		$replies = $post->loadReplies($post->pid);
 		if ($replies != null) {
 			foreach ($replies as $replypid) {

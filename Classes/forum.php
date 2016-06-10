@@ -25,6 +25,9 @@
 if (!class_exists('DBManager')) {
 	include('Classes/DBManager.php');
 }
+if (!class_exists('post')) {
+	include('Classes/post.php');
+}
 
 class forum
 {
@@ -91,19 +94,67 @@ class forum
 					array_push($ret, $tmpfid);
 				}
 			}
-		} else {
-			$this->recursionDone = true;
-		}
+		} else { $this->recursionDone = true; }
 		return $ret;
 	}
 	public function delete() {
-		/*******TODO*******/
+		foreach ($this->children as $childfid) {
+			$tmp = new forum();
+			$tmp->load($childfid);
+			$tmp->delete();
+		}
+		$this->DB->connect();
+		$this->DB->statement("DELETE FROM forums WHERE fid = $this->fid;");
+		$this->DB->disconnect();
 	}
-	public function create($name, $description = null, $order = 0, $parent = null, $category = null) {
-		/*******TODO*******/
+	public function create($name, $description = null, $order = 0, $parent = null, $category = false) {
+		$fmtdescription = $description == null ? "null" : "'$description'";
+		$fmtparent = $parent == null ? "null" : $parent->fid;
+		$fmtcategory = $category == true ? 1 : 0;
+		$query = "INSERT INTO forums(displayorder, name, description, parent, category) " .
+			    "VALUES($order, '$name', $fmtdescription, $fmtparent, $fmtcategory);";
+		$this->DB->connect();
+		$this->DB->statement($query);
+		$this->DB->disconnect();
 	}
 	public function reorder($order) {
-		/*******TODO*******/
+		$this->DB->connect();
+		$this->DB->statement("UPDATE forums SET displayorder = $order WHERE fid = $this->fid;");
+		$this->DB->disconnect();
+	}
+	public function threadCount() {
+		return count($this->threadList());
+	}
+	public function postCount($post = null) {
+		$count = 0;
+		if ($post == null) {
+			$threadList = $this->threadList();
+			foreach ($threadList as $thread) {
+				$count += $this->postCount($thread);
+			}
+		} else if ($post->replies != null) {
+			foreach ($post->replies as $childpid) {
+				$child = new post();
+				$child->load($childpid, true);
+				$count += $this->postCount($child) + 1;
+			}
+		} else {
+			return 1;
+		}
+		return $count;
+	}
+	private function threadList() {
+		$threads = array();
+		$this->DB->connect();
+		$pidList = $this->DB->query("SELECT pid FROM posts WHERE fid = $this->fid;");
+		$this->DB->disconnect();
+		foreach($pidList as $pidtmp) {
+			$pid = $pidtmp['pid'];
+			$tmp = new post();
+			$tmp->load($pid, true);
+			array_push($threads, $tmp);
+		}
+		return $threads;
 	}
 }
 

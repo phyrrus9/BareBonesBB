@@ -23,6 +23,9 @@
 	$fid = -1;
 	if (isset($_GET['fid'])) {
 		$fid = $_GET['fid'];
+		if (!strcmp($fid, "")) {
+			$fid = -1;
+		}
 	}
 ?>
 <html>
@@ -31,9 +34,9 @@
         <title>Viewing forum</title>
     </head>
     <body>
-	   <a href="viewForum.php">Forum Index</a>
 	   <?php
 		if ($fid < 0) {
+			display_forumNavigation();
 			$forums = $FM->getForums();
 			foreach ($forums as $forum) {
 				display_forumList($forum->fid);

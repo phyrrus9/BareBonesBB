@@ -48,6 +48,16 @@ if (!defined("FUNC_posts")) {
 	   $pid = $_GET['pid'];
 	   $curPost = new post();
 	   $curPost->load($pid);
+	   $fid = $curPost->forum->fid;
+	   $forumName = $curPost->forum->name;
+	   $parentpid = $curPost->parent == null ? null : $curPost->parent->pid;
+	   $parentName = $curPost->parent == null ? null : $curPost->parent->title;
+	   if ($parentpid == null) {
+		echo("<a href=\"viewForum.php?fid=$fid\" class=\"button\">$forumName</a> ");
+	   } else {
+		   echo("<a href=\"viewPost.php?pid=$parentpid\" class=\"button\">$parentName</a> ");
+	   }
+	   echo("<h3>$curPost->title</h3>");
 	   display_post($curPost);
 	   ?>
     </body>

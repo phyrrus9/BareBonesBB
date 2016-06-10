@@ -134,7 +134,8 @@ class post {
 		$fid = $this->forum->fid;
 		$uid = $this->SM->uid;
 		$parent = $this->pid;
-		$query = "INSERT INTO posts(uid, parentpid, message) VALUES($uid, $parent, '$message');";
+		$title = $this->title;
+		$query = "INSERT INTO posts(uid, parentpid, message, msgtitle) VALUES($uid, $parent, '$message', 'RE: $title');";
 		$check = "SELECT pid FROM posts WHERE uid = $uid AND parentpid = $parent AND message = '$message';";
 		$this->DB->connect();
 		$this->DB->statement($query);
@@ -204,6 +205,12 @@ class post {
 		$this->DB->statement($query);
 		$this->DB->disconnect();
 		return true;
+	}
+	public function owns() {
+		if ($this->user->uid == $this->SM->uid) {
+			return true;
+		}
+		return false;
 	}
 }
 

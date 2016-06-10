@@ -56,12 +56,15 @@ if (!class_exists('DBManager')) {
 		}
 		public function statement($query)
 		{
-			mysqli_query($this->db, $query);
+			return mysqli_query($this->db, $query);
 		}
 		public function query($query)
 		{
 			$ret = array();
 			$res = mysqli_query($this->db, $query);
+			if (is_bool($res)) {
+				return $res;
+			}
 			//$ret = mysqli_fetch_all($res);
 			$cols = mysqli_fetch_fields($res);
 			while (($row = mysqli_fetch_row($res)) != null)

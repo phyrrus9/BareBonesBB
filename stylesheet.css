@@ -22,15 +22,31 @@ a.button {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
-
     text-decoration: none;
     color: initial;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 input.button {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
-
     text-decoration: none;
     color: initial;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+td.header {
+    font-weight: bold;
+}
+table.forumList {
+    padding-left: 2%;
+    width: auto;
+}
+td.data {
+    padding-left: 25px;
+    padding-right: 85px;
+}
+a {
+    color: black;
 }

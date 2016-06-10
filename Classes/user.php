@@ -27,15 +27,13 @@ if (!class_exists('user')) {
 		public $username;
 		public $email;
 		private $DB;
-		public function __construct()
-		{
+		public function __construct() {
 			$this->uid = -1;
 			$this->username = null;
 			$this->email = null;
 			$this->DB = new DBManager();
 		}
-		public function load($uid)
-		{
+		public function load($uid) {
 			$ret = array();
 			$query = "SELECT uid, username, email FROM users WHERE uid = $uid;";
 			$this->DB->connect();
@@ -49,13 +47,33 @@ if (!class_exists('user')) {
 			$this->DB->disconnect();
 			return $ret;
 		}
-		public function loadusername($username)
-		{
+		public function loadusername($username) {
 			$this->DB->connect();
 			$query = "SELECT uid FROM users WHERE username = $username;";
 			$uid = $this->DB->query($query)[0]['uid'];
 			$this->DB->disconnect();
 			return $this->load($uid);
+		}
+		public function register($username, $email, $password) {
+			
+		}
+		private function setup_permissions($uid) {
+			global $UPGRADE_SETTINGS;
+			foreach ($UPGRADE_SETTINGS as $key => $value) {
+				$k = "p_$key";
+				$$k = $value;
+			}
+			$query = "INSERT INTO userqueue(uid,p_post,p_reply,p_lock_own," .
+				    "p_unlock_own,p_delete_own,p_warn,p_manage_flags,p_move," .
+				    "p_lock,p_delete,p_ban,p_moderator) ".
+				    "VALUES($uid,$p_post,$p_reply,$p_lock_own,$p_unlock_own," .
+				    "$p_delete_own,$p_warn,$p_manage_flags,$p_move,$p_lock," .
+				    "$p_delete,$p_ban,$p_moderator);";
+			$query2 = "INSERT INTO override_userqueue(uid) VALUES($uid);";
+			$this->DB->connect();
+			$this->DB->statement($query);
+			$this->DB->statement($query2);
+			$this->DB->disconnect();
 		}
 	}
 }	
