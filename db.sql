@@ -44,6 +44,32 @@ INSERT INTO `forums` VALUES (8,0,'Announcements',NULL,NULL,1),(9,1,'News',NULL,N
 UNLOCK TABLES;
 
 --
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `log` (
+  `uid` int(11) DEFAULT NULL,
+  `fid` int(11) DEFAULT NULL,
+  `class` varchar(128) DEFAULT NULL,
+  `method` varchar(128) DEFAULT NULL,
+  `action` varchar(512) DEFAULT NULL,
+  `whendt` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log`
+--
+
+LOCK TABLES `log` WRITE;
+/*!40000 ALTER TABLE `log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `override_userqueue`
 --
 
@@ -114,7 +140,7 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(2,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+INSERT INTO `permissions` VALUES (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),(2,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),(4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),(6,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,19 +182,19 @@ DROP TABLE IF EXISTS `userqueue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userqueue` (
-  `p_uid` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_post` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_reply` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_lock_own` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_unlock_own` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_delete_own` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_warn` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_manage_flags` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_move` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_lock` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_delete` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_ban` tinyint(4) NOT NULL DEFAULT '-1',
-  `p_moderator` tinyint(4) NOT NULL DEFAULT '-1'
+  `p_uid` int(11) NOT NULL,
+  `p_post` int(11) DEFAULT '-1',
+  `p_reply` int(11) DEFAULT '-1',
+  `p_lock_own` int(11) DEFAULT '-1',
+  `p_unlock_own` int(11) DEFAULT '-1',
+  `p_delete_own` int(11) DEFAULT '-1',
+  `p_warn` int(11) DEFAULT '-1',
+  `p_manage_flags` int(11) DEFAULT '-1',
+  `p_move` int(11) DEFAULT '-1',
+  `p_lock` int(11) DEFAULT '-1',
+  `p_delete` int(11) DEFAULT '-1',
+  `p_ban` int(11) DEFAULT '-1',
+  `p_moderator` int(11) DEFAULT '-1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -178,6 +204,7 @@ CREATE TABLE `userqueue` (
 
 LOCK TABLES `userqueue` WRITE;
 /*!40000 ALTER TABLE `userqueue` DISABLE KEYS */;
+INSERT INTO `userqueue` VALUES (6,0,0,50,75,100,127,127,127,127,127,127,127);
 /*!40000 ALTER TABLE `userqueue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +221,7 @@ CREATE TABLE `users` (
   `password` varchar(256) DEFAULT NULL,
   `email` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +230,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','*26F47B878EE2CB233E45DDC0A5F0E4BFE9120112','admin@localhost'),(2,'test','*94BDCEBE19083CE2A1F959FD02F964C7AF4CFC29','test@localhost');
+INSERT INTO `users` VALUES (1,'admin','*26F47B878EE2CB233E45DDC0A5F0E4BFE9120112','admin@localhost'),(2,'test','*94BDCEBE19083CE2A1F959FD02F964C7AF4CFC29','test@localhost'),(4,'test2','*7CEB3FDE5F7A9C4CE5FBE610D7D8EDA62EBE5F4E','test2@loalhost'),(5,'test3','*F357E78CABAD76FD3F1018EF85D78499B6ACC431','test3'),(6,'test4','*D159BBDA31273BE3F4F00715B4A439925C6A0F2D','test4');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -216,4 +243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-10 20:22:56
+-- Dump completed on 2016-06-11 13:56:20

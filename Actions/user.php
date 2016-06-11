@@ -34,6 +34,8 @@ if (!defined("ACTION_user")) {
 			\Actions\user\action_logout();
 		} else if (!strcmp($action, "login")) {
 			\Actions\user\action_login($params['username'], $params['password']);
+		} else if (!strcmp($action, "register")) {
+			\Actions\user\action_register($params['username'], $params['password'], $params['email']);
 		}
 	}
 	
@@ -49,6 +51,11 @@ if (!defined("ACTION_user")) {
 		} else {
 			redirect_page("index.php");
 		}
+	}
+	function action_register($username, $password, $email) {
+		$user = new \user();
+		$user->register($username, $email, $password);
+		redirect_page("index.php");
 	}
 }
 

@@ -37,5 +37,14 @@
 		   <label>Password</label>&emsp;<input type="password" name="password" /><br />
 		   <input type="submit" value="Log In" />
 	    </form>
+	    <hr />
+	    <div class="navright">
+		   <form action="action.php?type=user&action=register" method="POST">
+			  <label>Username</label>&emsp;<input type="text" name="username" /><br />
+			  <label>Email</label>&emsp;<input type="text" name="email" /><br />
+			  <label>Password</label>&emsp;<input type="password" name="password" /><br />
+			  <input type="submit" value="Register" />
+		   </form>
+	    </div>
 	</body>
 </html>

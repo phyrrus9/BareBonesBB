@@ -55,7 +55,13 @@ if (!class_exists('user')) {
 			return $this->load($uid);
 		}
 		public function register($username, $email, $password) {
-			
+			$this->DB->connect();
+			$this->DB->statement("INSERT INTO users(username, password, email) " .
+							 "VALUES('$username', PASSWORD('$password'), '$email');");
+			$uid = $this->DB->query("SELECT uid FROM users WHERE username = '$username' " .
+							    "AND password = PASSWORD('$password') AND email = '$email';")[0]['uid'];
+			$this->DB->disconnect();
+			$this->setup_permissions($uid);
 		}
 		private function setup_permissions($uid) {
 			global $UPGRADE_SETTINGS;
@@ -63,7 +69,7 @@ if (!class_exists('user')) {
 				$k = "p_$key";
 				$$k = $value;
 			}
-			$query = "INSERT INTO userqueue(uid,p_post,p_reply,p_lock_own," .
+			$query = "INSERT INTO userqueue(p_uid,p_post,p_reply,p_lock_own," .
 				    "p_unlock_own,p_delete_own,p_warn,p_manage_flags,p_move," .
 				    "p_lock,p_delete,p_ban,p_moderator) ".
 				    "VALUES($uid,$p_post,$p_reply,$p_lock_own,$p_unlock_own," .
@@ -76,6 +82,13 @@ if (!class_exists('user')) {
 			$this->DB->statement($query2);
 			$this->DB->statement($query3);
 			$this->DB->disconnect();
+		}
+		public function postCount() {
+			$query = "SELECT pid FROM posts WHERE uid = $this->uid;";
+			$this->DB->connect();
+			$count = count($this->DB->query($query));
+			$this->DB->disconnect();
+			return $count;
 		}
 	}
 }	

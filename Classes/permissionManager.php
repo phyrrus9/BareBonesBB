@@ -25,6 +25,9 @@
 if (!class_exists('DBManager')) {
 	include 'DBManager.php';
 }
+if (!class_exists('user')) {
+	include 'Classes/user.php';
+}
 
 if (!class_exists('permissionManager')) {
 
@@ -32,6 +35,7 @@ if (!class_exists('permissionManager')) {
 		private $DB;
 		private $data = null;
 		private $uid = -1;
+		private $override = false;
 		public function reload()
 		{
 			global $SM;
@@ -55,6 +59,7 @@ if (!class_exists('permissionManager')) {
 			$res = $this->DB->query($query);
 			$this->data = $res[0];
 			$this->DB->disconnect();
+			$this->run_upgrades();
 			return true;
 		}
 		public function can($perm) {
@@ -76,7 +81,7 @@ if (!class_exists('permissionManager')) {
 			$key = "is_" . $perm;
 			return $this->data[$key] == 1;
 		}
-		public function set($perm, $uid, $value)
+		public function set($perm, $uid, $value = true)
 		{
 			if ($this->data == null) {
 				$this->reload();
@@ -87,12 +92,12 @@ if (!class_exists('permissionManager')) {
 			if ($value) {
 				$val = 1;
 			}
-			if ($this->is("admin") || $this->is("super")) {
+			if ($this->is("admin") || $this->is("super") || $this->override) {
 				$this->DB->statement("UPDATE permissions SET can_$perm = $val WHERE uid = $uid;");
 			}
 			$this->DB->disconnect();
 		}
-		public function set_is($perm, $uid, $value)
+		public function set_is($perm, $uid, $value = true)
 		{
 			if ($this->data == null) {
 				$this->reload();
@@ -111,9 +116,7 @@ if (!class_exists('permissionManager')) {
 					$perform = false;
 				}
 			}
-			if ($perform == true) {
-				$this->DB->statement($query);
-			}
+			if ($perform == true || $this->override) { $this->DB->statement($query); }
 			$this->DB->disconnect();
 		}
 		public function get_uid($perm, $uid)
@@ -179,6 +182,36 @@ if (!class_exists('permissionManager')) {
 			}
 			$this->DB->disconnect();
 			return $ret;
+		}
+		public function run_upgrades() {
+			$this->DB = new DBManager();
+			$this->DB->connect();
+			$query = "SELECT p_post as post, p_reply as reply, p_lock_own as lock_own, p_unlock_own as unlock_own, " .
+				    "p_delete_own as delete_own, p_warn as warn, p_manage_flags as manage_flags, p_move as move, " .
+				    "p_lock as \"lock\", p_delete as \"delete\", p_ban as ban, p_moderator as moderator ";
+			$clause1 = "FROM userqueue WHERE p_uid = $this->uid;";
+			$clause2 = "FROM userqueue WHERE p_uid = $this->uid;";
+			$upgrades = $this->DB->query($query . $clause1)[0];
+			$overrides = $this->DB->query($query . $clause2)[0];
+			$this->DB->disconnect();
+			$user = new user();
+			$user->load($this->uid);
+			$postcount = $user->postCount();
+			if (count($overrides) > 0) {
+				foreach ($overrides as $key => $value) {
+					if ($value == 1) {
+						$upgrades[$key] = -1;
+					}
+				}
+			} if (count($upgrades) > 0) {
+				$this->override = true;
+				foreach ($upgrades as $key => $value) {
+					if ($value > 0 && $postcount >= $value) {
+						!strcmp($key, "moderator") ? $this->set_is($key, $this->uid) : $this->set($key, $this->uid);
+					}
+				}
+				$this->override = false;
+			}
 		}
 	}
 	$PM = new permissionManager();
